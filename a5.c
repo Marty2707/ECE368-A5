@@ -25,7 +25,9 @@ Point_t point;
 int binary_search(Tnode *root, Circle_t key)
 {
     int i = 0;
-        if ( (key.x - key.r) > (root -> point.x) )
+        if (root == NULL)
+            return 0;
+        else if ( (key.x - key.r) > (root -> point.x) )
             i+= binary_search(root ->right, key);
 
         else if ( (key.x + key.r) < (root -> point.x) )
