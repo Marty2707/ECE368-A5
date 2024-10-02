@@ -15,6 +15,42 @@ typedef struct
     int r;
 } Circle_t;
 
+typedef struct _Tnode
+{ 
+int left;
+int right;
+Point_t point;
+} Tnode;
+
+int binary_search(Tnode *root, Circle_t key)
+{
+    int i = 0;
+        if ( (key.x - key.r) > (root -> point.x) )
+            i+= binary_search(root ->right, key);
+
+        else if ( (key.x + key.r) < (root -> point.x) )
+            i+= binary_search(root ->left, key);
+
+        else if ( (key.x + key.r) >= (root -> point.x) && (key.x - key.r) <= (root -> point.x))
+            i+= binary_search(root ->left, key) + binary_search(root ->right, key);
+    
+    return i;
+}
+
+Tnode * build_bst (Point_t * arr, int l, int r)
+{
+    if (l>r) return NULL;
+
+    int m = (1+r) / 2;
+
+    Tnode* node = (struct Tnode*) malloc(sizeof( Tnode));
+    node -> point = arr[m];
+    node -> left = build_bst (arr, l, m-1);
+    node -> right = build_bst(arr, m+1, r);
+
+    return node;
+
+}
 
 static int linecount(FILE * fp)
 {
@@ -23,7 +59,6 @@ static int linecount(FILE * fp)
 
     while ((ch = fgetc(fp)) != EOF) 
     {
-        printf("ch = %c\n", ch);
         if (ch == '\n') 
         {
             line_count++;
@@ -68,5 +103,9 @@ int main(int argc, char ** argv)
 
     scanf("%d %d %d", &circle.x, &circle.y, &circle.r);
     printf("X: %d, Y: %d, R: %d\n", circle.x, circle.y, circle.r);
+
+    free(points);
     return EXIT_SUCCESS;
 }
+
+
