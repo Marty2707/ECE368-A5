@@ -107,6 +107,8 @@ int main(int argc, char ** argv)
 
     qsort(points, len, sizeof(Point_t), compare);
 
+    build_bst(points, 0, len-1);
+    
     Circle_t circle;
 
     scanf("%d %d %d", &circle.x, &circle.y, &circle.r);
