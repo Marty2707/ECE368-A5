@@ -25,16 +25,22 @@ Point_t point;
 int binary_search(Tnode *root, Circle_t key)
 {
     int i = 0;
-        if (root == NULL)
-            return 0;
-        else if ( (key.x - key.r) > (root -> point.x) )
-            i+= binary_search(root ->right, key);
+    if (root == NULL)
+        return 0;
+    else if ( (key.x - key.r) > (root -> point.x) )
+        i+= binary_search(root ->right, key);
 
-        else if ( (key.x + key.r) < (root -> point.x) )
-            i+= binary_search(root ->left, key);
+    else if ( (key.x + key.r) < (root -> point.x) )
+        i+= binary_search(root ->left, key);
 
-        else if ( (key.x + key.r) >= (root -> point.x) && (key.x - key.r) <= (root -> point.x))
-            i+= binary_search(root ->left, key) + binary_search(root ->right, key);
+    else if ( (key.x + key.r) >= (root -> point.x) && (key.x - key.r) <= (root -> point.x)){
+
+        if (key.r*key.r >= ((root -> point.x) - (key.x)) * ((root -> point.x) - (key.x)) + ((root -> point.y) - (key.y)) * ((root -> point.y) - (key.y))) 
+        {
+            i++;
+        }
+        i+= binary_search(root ->left, key) + binary_search(root ->right, key);
+    }
     
     return i;
 }
@@ -43,7 +49,7 @@ Tnode * build_bst (Point_t * arr, int l, int r)
 {
     if (l>r) return NULL;
 
-    int m = (1+r) / 2;
+    int m = (l+r) / 2;
 
     Tnode* node = (Tnode*) malloc(sizeof( Tnode));
     node -> point = arr[m];
@@ -51,7 +57,6 @@ Tnode * build_bst (Point_t * arr, int l, int r)
     node -> right = build_bst(arr, m+1, r);
 
     return node;
-
 }
 
 static int linecount(FILE * fp)
@@ -73,6 +78,15 @@ static int linecount(FILE * fp)
 
 int compare(const void* a, const void* b) {
    return ((*(Point_t*)a).x - (*(Point_t*)b).x);
+}
+
+
+void BT_Delete (Tnode *bt_ptr)
+{ if (bt_ptr != NULL) {
+    BT_Delete (bt_ptr->left);
+    BT_Delete (bt_ptr->right);
+    free(bt_ptr);
+}
 }
 
 int main(int argc, char ** argv) 
@@ -100,21 +114,25 @@ int main(int argc, char ** argv)
 
     fclose(fp);
 
-    for(int i = 0; i < len; i++)
-    {
-        printf("X: %d, Y: %d\n", points[i].x, points[i].y);  
-    }
+    // for(int i = 0; i < len; i++)
+    // {
+    //     printf("X: %d, Y: %d\n", points[i].x, points[i].y);  
+    // }
 
     qsort(points, len, sizeof(Point_t), compare);
 
-    Tnode * root = build_bst(points, 0, len-1);
-
+    Tnode* root = build_bst(points, 0, len-1);
     Circle_t circle;
 
-    scanf("%d %d %d", &circle.x, &circle.y, &circle.r);
-    printf("X: %d, Y: %d, R: %d\n", circle.x, circle.y, circle.r);
+    while(scanf("%d %d %d", &circle.x, &circle.y, &circle.r) == 3)
+    {
+        printf("%d\n", binary_search(root, circle));
+    }
+        
+    //printf("X: %d, Y: %d, R: %d\n", circle.x, circle.y, circle.r);
 
     free(points);
+    BT_Delete(root);
     return EXIT_SUCCESS;
 }
 
