@@ -17,8 +17,8 @@ typedef struct
 
 typedef struct _Tnode
 { 
-int left;
-int right;
+struct _Tnode * left;
+struct _Tnode * right;
 Point_t point;
 } Tnode;
 
@@ -45,7 +45,7 @@ Tnode * build_bst (Point_t * arr, int l, int r)
 
     int m = (1+r) / 2;
 
-    Tnode* node = (struct Tnode*) malloc(sizeof( Tnode));
+    Tnode* node = (Tnode*) malloc(sizeof( Tnode));
     node -> point = arr[m];
     node -> left = build_bst (arr, l, m-1);
     node -> right = build_bst(arr, m+1, r);
