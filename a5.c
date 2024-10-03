@@ -71,6 +71,10 @@ static int linecount(FILE * fp)
     return line_count;
 }
 
+int compare(const void* a, const void* b) {
+   return ((*(Point_t*)a).x - (*(Point_t*)b).x);
+}
+
 int main(int argc, char ** argv) 
 {
     char* filename;
@@ -100,6 +104,8 @@ int main(int argc, char ** argv)
     {
         printf("X: %d, Y: %d\n", points[i].x, points[i].y);  
     }
+
+    qsort(points, len, sizeof(int), compare);
 
     Circle_t circle;
 
