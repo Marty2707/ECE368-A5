@@ -105,7 +105,7 @@ int main(int argc, char ** argv)
         printf("X: %d, Y: %d\n", points[i].x, points[i].y);  
     }
 
-    qsort(points, len, sizeof(int), compare);
+    qsort(points, len, sizeof(Point_t), compare);
 
     Circle_t circle;
 
